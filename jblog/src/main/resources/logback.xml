@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Logback configuration -->
+<configuration>
+	<!-- Appender : 어디에 어떤 로그를 기록할 것인지 설정 -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>UTF-8</charset>
+			<!-- 기록할 로그의 포맷을 결정 -->
+			<Pattern>
+				%d{HH:mm:ss.SSS} %thread %-5level %logger{5} - %msg%n
+			</Pattern>
+		</encoder>
+	</appender>
+	
+	<!-- Rolling & Archiving -->
+	<appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 저장할 파일명 -->
+		<file>\log-jblog\jblog.log</file>
+		<!-- 로그 포맷 설정 -->
+		<encoder>
+			<charset>UTF-8</charset>
+			<!-- 기록할 로그의 포맷을 결정 -->
+			<Pattern>
+				%d{HH:mm:ss.SSS} %thread %-5level %logger{5} - %msg%n
+			</Pattern>
+		</encoder>
+		<!-- Rolling 정책 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<!-- Rolling 파일명의 규칙 -->
+			<FileNamePattern>\log-jblog\jblog.%i.log.zip</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>10</MaxIndex>
+		</rollingPolicy>
+		<!-- 롤링 트리거 : 롤링을 발생시킬 상황 정보 -->
+		<!-- Size 기반으로 트리거 발생 -->
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>100MB</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+	
+	<!-- 로그 기록 상황 -->
+	<!-- com.bitacademy.myportal 하위 패키지의 클래스의 DEBUG 이상 상황에서의 로그 -->
+	<logger name="com.jblog" level="DEBUG">
+		<!-- 로깅을 수행할 appender 지정 -->
+		<appender-ref ref="consoleAppender" />
+	</logger>
+	
+	<!-- 로그는 Tree 기반으로 적용 -->
+	<root level="TRACE">	<!-- 발생하는 모든 로그 -->
+		<!-- 내부 모든 패키지의 로그를 적용 -->
+		<appender-ref ref="fileAppender" />	<!-- fileAppender를 이용하여 기록 -->
+	</root>
+	
+</configuration>

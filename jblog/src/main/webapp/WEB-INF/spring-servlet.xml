@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+
+
+	<context:annotation-config />
+	<context:component-scan base-package="com.jblog.controller" />
+
+	<!-- Spring 은 기본적으로 모든 요청을 DispatcherServlet 이 처리
+		정적 자원 제공을 위해서는 정적 자원 처리를
+		DefaultServlet 에게 위임해야 한다 -->
+	<mvc:annotation-driven>
+		<!-- Message Converter 등록 -->
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+				<!-- 이 컨버터가 지원할 미디어 타입 지정 -->
+				<property name="supportedMediaTypes">
+					<list>
+						<!-- Map, 자바 빈 객체를 JSON으로 변환 -->
+						<value>application/json;charset=UTF-8</value>
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<mvc:default-servlet-handler />		<!-- 정적 자원 처리 담당 -->
+
+	<!-- View Resolver 
+		전달받은 ViewName 을 기반으로 적절한 실제 View 객체를 찾아주는 역할 -->
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+				value="org.springframework.web.servlet.view.JstlView" />
+		
+		<!-- ViewName의 접두어 -->
+		<property name="prefix" value="/WEB-INF/views/" />
+		<!-- ViewName의 접미어 -->
+		<property name="suffix" value=".jsp" />	
+		<!-- ViewResolver는 여러개 등록될 수 있고 우선순위 지정 가능 -->
+		<property name="order" value="1" />
+	</bean>
+	
+	<!-- Interceptors -->
+	<mvc:interceptors>
+		<!-- 순서대로 적용된다 -->
+		<!-- /board 하위 모든 url에 인터셉터 적용 -->
+		<!-- mvc:interceptor>
+			<mvc:mapping path="/board/**" />
+			<bean class="com.bitacademy.myportal.interceptors.MyInterceptor" />
+		</mvc:interceptor>
+		
+		<mvc:interceptor>
+			<mvc:mapping path="/board/**" />
+			<bean class="com.bitacademy.myportal.interceptors.MyInterceptor2" />
+		</mvc:interceptor -->
+		<!-- 인증처리 : 인터셉터 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/board/**" />
+			<!-- 아래 매핑은 인터셉터 적용에서 제외 -->
+			<mvc:exclude-mapping path="/board/list/**" />	<!-- /board/list 하위 요청은 적용안함 -->
+			<mvc:exclude-mapping path="/board/"/>
+			<mvc:exclude-mapping path="/board"/>
+			<bean class="com.jblog.interceptors.AuthInterceptor" />
+		</mvc:interceptor>
+	</mvc:interceptors>
+
+
+</beans>
