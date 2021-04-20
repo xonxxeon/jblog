@@ -22,7 +22,6 @@
 			<input type="radio" name="searachType" value="name">블로거</radio><br>
 		</div>
 	
-	<jsp:include page="/WEB-INF/views/includes/footer.jsp" />
 	
 </body>
 </html>

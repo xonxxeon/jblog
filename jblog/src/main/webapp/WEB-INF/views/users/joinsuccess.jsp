@@ -19,7 +19,6 @@
 		<p>로그인 후 개인블로그 서비스를 이용하실 수 있습니다 !</p>
 		<a href="<c:url value="/users/login" /> ">로그인</a>
 	
-	<jsp:include page="/WEB-INF/views/includes/footer.jsp" />
 	
 </body>
 </html>
