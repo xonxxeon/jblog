@@ -46,29 +46,24 @@
 		<property name="order" value="1" />
 	</bean>
 	
-	<!-- Interceptors -->
-	<mvc:interceptors>
-		<!-- 순서대로 적용된다 -->
-		<!-- /board 하위 모든 url에 인터셉터 적용 -->
-		<!-- mvc:interceptor>
-			<mvc:mapping path="/board/**" />
-			<bean class="com.bitacademy.myportal.interceptors.MyInterceptor" />
-		</mvc:interceptor>
-		
-		<mvc:interceptor>
-			<mvc:mapping path="/board/**" />
-			<bean class="com.bitacademy.myportal.interceptors.MyInterceptor2" />
-		</mvc:interceptor -->
-		<!-- 인증처리 : 인터셉터 -->
-		<mvc:interceptor>
-			<mvc:mapping path="/board/**" />
-			<!-- 아래 매핑은 인터셉터 적용에서 제외 -->
-			<mvc:exclude-mapping path="/board/list/**" />	<!-- /board/list 하위 요청은 적용안함 -->
-			<mvc:exclude-mapping path="/board/"/>
-			<mvc:exclude-mapping path="/board"/>
-			<bean class="com.jblog.interceptors.AuthInterceptor" />
-		</mvc:interceptor>
-	</mvc:interceptors>
+	
+	<!-- Message Source -->
+	<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+		<!-- 메세지 소스 위치 -->
+		<property name="basenames" value="message/messages_ko" />
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+	<!-- Multipart Resolver -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 업로드 할 수 있는 최대 파일 용량 : 10MB -->
+		<property name="maxUploadSize" value="10485760" />
+		<!-- 파일 인코딩 정보 -->
+		<property name="defaultEncoding" value="UTF-8" />
+	</bean>
+	
+	<!-- Resource Mapping : 요청 url과 실제 디렉토리를 매핑(연결) -->
+	<mvc:resources location="file:c:/work/upload/" mapping="/upload-images/**" />
 
 
 </beans>

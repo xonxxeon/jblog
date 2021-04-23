@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="blog">
+
+	<!-- 카테고리 불러오기 -->
+	<select id="cateAll" parameterType="string" resultType="blogVo">
+		<![CDATA[
+			SELECT u.userName, u.id, c.cateNo, c.cateName, c.description, c.regDate
+			FROM category c, blog b, users u
+			WHERE b.userNo = c.userNo AND b.userNo = u.userNo
+				AND u.id = #{value}
+			ORDER BY c.regDate DESC
+		]]>
+	</select>
+	
+	<select id="getPostCount" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT c.cateNo, c.userNo, c.cateName, c.description, c.regDate, p.postCount
+			FROM category c,
+			     (SELECT cateNo, COUNT(*) postCount
+			      FROM post
+			      GROUP BY cateNo) p
+			WHERE userNo = #{userNo} AND c.cateNo = p.cateNo(+)
+			ORDER BY cateNo DESC
+		]]>
+	</select>
+	
+	<select id="getUser" parameterType="string" resultType="blogVo">
+		<![CDATA[
+			SELECT u.id as id, b.userNo as userNo, b.blogTitle as blogTitle, b.logoFile as logoFile
+			FROM users u, blog b
+			WHERE u.userNo = b.userNo AND u.id = #{value}
+		]]>
+	</select>
+	
+	<select id="getUserId" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT id FROM users WHERE userNo = #{userNo}
+		]]>
+	</select>
+	
+	<select id="update" parameterType="string" resultType="blogVo">
+		<![CDATA[
+			UPDATE blog
+			SET blogTitle = #{blogTitle}, logoFile = #{logoFile}
+			WHERE userNo = (SELECT userNo FROM users WHERE id = #{value})
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="blogVo">
+		<![CDATA[
+			INSERT INTO category (cateNo, userNo, cateName, description, regDate)
+			VALUES( seq_category_no.nextval,
+					#{userNo},
+					#{cateName}, 
+					#{description},
+					sysdate)
+		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="blogVo">
+		<![CDATA[
+			DELETE FROM category
+			WHERE cateNo = #{cateNo}
+		]]>
+	</delete>
+	
+	<insert id="writePost" parameterType="blogVo">
+		<![CDATA[
+			INSERT INTO post (postNo, cateNo, postTitle, postContent, regDate)
+			VALUES( seq_post_no.nextval,
+					#{cateNo},
+					#{postTitle},
+					#{postContent},
+					sysdate)
+		]]>
+	</insert>
+	
+	<select id="mainPost" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT p.postTitle, p.postContent
+			FROM post p, (SELECT MAX(p.postNo) as postNo
+			                FROM post p, category c
+			                WHERE p.cateNo = c.cateNo AND c.userNo = #{userNo}) max
+			WHERE p.postNo = max.postNo
+		]]>
+	</select>
+	
+	<select id="mainList" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT u.userNo, p.cateNo, p.postNo, p.postTitle, p.regDate
+			FROM post p, users u, category c
+			WHERE u.userNo = #{userNo} AND u.userNo = c.userNo AND c.cateNo = p.cateNo(+) 
+			ORDER BY p.postNo DESC
+		]]>
+	</select>
+	
+	<select id="selCatePost" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT p.postTitle, p.postContent
+			FROM post p, (SELECT MAX(p.postNo) as postNo
+			                FROM post p, category c
+			                WHERE p.cateNo = c.cateNo AND c.cateNo = #{cateNo}) max
+			WHERE p.postNo = max.postNo
+		]]>
+	</select>
+	
+	<select id="selCateList" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT p.cateNo, p.postNo, p.postTitle, p.regDate
+			FROM post p, category c
+			WHERE c.cateNo = #{cateNo} AND c.cateNo = p.cateNo(+) 
+			ORDER BY p.postNo DESC
+		]]>
+	</select>
+	
+	<select id="selPost" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT p.postTitle, p.postContent
+			FROM post p
+			WHERE p.postNo = #{postNo}
+		]]>
+	</select>
+	
+	<update id="updateBlog" parameterType="blogVo">
+		<![CDATA[
+			UPDATE blog
+			SET blogTitle = #{blogTitle}, logoFile = #{logoFile}
+			WHERE userNo = #{userNo}
+		]]>
+	</update>
+	
+
+</mapper>

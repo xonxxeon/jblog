@@ -8,17 +8,31 @@
 <head>
 <meta charset="UTF-8">
 <title>JBlog</title>
-<link rel="stylesheet"
-	href="<c:url value="/assets/css/main.css" /> " />
+
+<style>
+		#bt{
+             width: 300px;
+             margin: 0 auto;
+         }
+         .joinsuccess {
+             text-align: center;
+         }
+</style>
+
+</head>
 </head>
 <body>
 
 	<jsp:include page="/WEB-INF/views/includes/header.jsp" />
 		
-		<p>회원가입을 축하드립니다 !</p>
-		<p>로그인 후 개인블로그 서비스를 이용하실 수 있습니다 !</p>
-		<a href="<c:url value="/users/login" /> ">로그인</a>
-	
+		<div class="joinsuccess">
+			<p>회원가입을 축하드립니다 !</p>
+			<p>로그인 후 개인블로그 서비스를 이용하실 수 있습니다 !</p>
+		    <a id="bt" href="<c:url value="/users/login" /> " 
+						class="btn btn-lg btn-primary btn-block" 
+						role="button" aria-pressed="true">로그인</a>
+		</div>
+
 	
 </body>
 </html>

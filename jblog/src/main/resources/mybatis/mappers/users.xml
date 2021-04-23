@@ -9,11 +9,56 @@
 			INSERT INTO users (userNo, id, userName, password, joinDate)
 			VALUES (seq_users_no.nextval,
 					#{id},
-					#{name},
+					#{userName},
 					#{password},
-					#{joinDate}
+					sysdate
 			)
 		]]>
 	</insert>
+	
+	<insert id="insertb" parameterType="userVo">
+		<selectKey keyProperty="userNo" resultType="long" order="BEFORE">
+			select seq_users_no.currval from dual
+		</selectKey>
+		<![CDATA[
+			INSERT INTO blog (userNo, blogTitle, logoFile)
+			VALUES ( #{userNo},
+					#{userName},
+					'jblog.png'
+			)
+		]]>
+	</insert>
+	
+	<insert id="insertc" parameterType="userVo">
+		<selectKey keyProperty="userNo" resultType="long" order="BEFORE">
+			select seq_users_no.currval from dual
+		</selectKey>
+		<![CDATA[
+			INSERT INTO category (cateNo, userNo, cateName, description, regDate)
+			VALUES( seq_category_no.nextval,
+					#{userNo},
+					'미분류', 
+					'기본으로 만들어지는 카테고리 입니다.',
+					sysdate)
+		]]>
+	</insert>
+	
+	<!-- 아이디 중복체크 -->
+	<select id="selectUserById" parameterType="string" resultType="userVo">
+		<![CDATA[
+			SELECT userNo, id, userName FROM users
+			WHERE id = #{value}
+		]]>
+	</select>
+	
+	<!-- 로그인 -->
+	<select id="selectUserByIdAndPassword" parameterType="map" resultType="userVo">
+		<![CDATA[
+			SELECT userNo, id, userName, password, joinDate
+			FROM users
+			WHERE id = #{id} AND password = #{password}	
+		]]>
+	</select>
+	
 	
 </mapper>

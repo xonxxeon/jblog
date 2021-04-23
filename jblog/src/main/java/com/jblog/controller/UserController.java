@@ -3,6 +3,8 @@ package com.jblog.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +42,7 @@ public class UserController {
 		
 		logger.debug("Form에 전송된 데이터 : " + userVo);
 		
+		
 		boolean success = userService.join(userVo);
 		
 		if(success) {
@@ -55,7 +58,7 @@ public class UserController {
 	//	회원가입 성공 페이지
 	@RequestMapping("/joinsuccess")
 	public String joinSuccess() {
-		return "members/joinsuccess";
+		return "users/joinsuccess";
 	}
 	
 	//	JSON 매핑 확인
@@ -81,6 +84,44 @@ public class UserController {
 		map.put("data", exists);
 		
 		return map;
+	}
+	
+	//	로그인 폼 처리
+	@RequestMapping(value="/login", method=RequestMethod.GET)
+	public String loginForm() {
+		return "users/loginForm";
+	}
+	
+	//	로그인 처리
+	@RequestMapping(value="/login", method=RequestMethod.POST)
+	public String loginAction(@RequestParam String id,
+							  @RequestParam String password,
+							  HttpSession session) {
+		UserVo authUser = userService.getUser(id, password);
+		
+		logger.debug("authUser : " + authUser.getId());
+
+		if(authUser != null) {
+			//	세션에 추가
+			session.setAttribute("authUser", authUser);
+			//	홈으로 리다이렉트
+			return "redirect:/";
+		} else {
+			//	로그인 실패
+			return "redirect:/users/login";
+		}
+		
+	}
+	
+	//	로그아웃
+	@RequestMapping("/logout")
+	public String logoutAction(HttpSession session) {
+		//	세션 지우기
+		session.removeAttribute("authUser");
+		//	세션 무효화
+		session.invalidate();
+		
+		return "redirect:/";
 	}
 	
 

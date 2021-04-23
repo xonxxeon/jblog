@@ -4,15 +4,11 @@
 	prefix="c" %>
 	
 <!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>JBlog</title>
-<link rel="stylesheet"
-	href="<c:url value="/assets/css/main.css" /> " />
-</head>
-<body>
-
+<style>
+	#searchBar {
+		text-align: center;
+	}
+</style>
 	<jsp:include page="/WEB-INF/views/includes/header.jsp" />
 		
 		<div id="searchBar">
