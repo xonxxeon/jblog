@@ -33,4 +33,9 @@ public interface BlogService {
 	
 	//	블로그 정보 수정
 	public boolean updateBlog(BlogVo vo);
+	
+	//	코멘트 작성, 삭제
+	public boolean addComment(BlogVo vo);
+	public boolean delComment(BlogVo vo);
+	public List<BlogVo> getComment(Long postNo);
 }

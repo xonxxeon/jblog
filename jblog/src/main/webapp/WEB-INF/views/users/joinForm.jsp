@@ -44,6 +44,16 @@
         .btn btn-outline-secondary{
             margin: 3px;
         }
+        
+        #checkbt {
+        	margin-top: 5px;
+        }
+        
+        #sendbt {
+             width: 300px;
+             margin: 0 auto;
+        }
+        
 	</style>
 
 </head>
@@ -70,7 +80,7 @@
             <label for="id">아이디</label>
             <input name="id" type="text" class="form-control">
 			<!-- 아이디 체크 버튼 -->
-			<input type="button" 
+			<input id="checkbt" type="button" 
 					class="btn btn-outline-secondary"
 					value="중복 체크" 
 					onclick="checkid(this.form.id, `<c:url value="/users/idcheck" />`) " /><br>
@@ -86,9 +96,10 @@
           	<input type="checkbox" class="form-check-input" id="agree" name="agree">
          	<label class="form-check-label">서비스 약관에 동의합니다.</label>
        		</div>
-
-       		<button type="submit" class="btn btn-outline-secondary">회원가입</button>
-		
+       		
+			<div class="send">
+       		<input id="sendbt" class="btn btn-lg btn-secondary btn-block" type="submit" value="회원가입">
+			</div>
 		</form>
 	
 	

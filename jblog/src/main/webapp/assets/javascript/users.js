@@ -39,6 +39,7 @@ function alertWrite(write){
 		alert("글 내용을 입력해주세요.");
 		write.postContent.focus();
 	} else {
+		alert("게시물이 작성되었습니다.");
 		return true;
 	}
 	

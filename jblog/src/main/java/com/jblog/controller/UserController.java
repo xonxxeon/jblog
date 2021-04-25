@@ -99,8 +99,9 @@ public class UserController {
 							  HttpSession session) {
 		UserVo authUser = userService.getUser(id, password);
 		
-		logger.debug("authUser : " + authUser.getId());
-
+		logger.debug("authUser no : " + authUser.getUserNo());
+		logger.debug("authUser id : " + authUser.getId());
+		logger.debug("authUser name : " + authUser.getUserName());
 		if(authUser != null) {
 			//	세션에 추가
 			session.setAttribute("authUser", authUser);

@@ -103,5 +103,22 @@ public class BlogServiceImpl implements BlogService {
 		int updatedCount = blogDaoImpl.updateBlog(vo);
 		return updatedCount == 1;
 	}
+
+	@Override
+	public boolean addComment(BlogVo vo) {
+		int insertedCount = blogDaoImpl.addComment(vo);
+		return insertedCount == 1;
+	}
+
+	@Override
+	public boolean delComment(BlogVo vo) {
+		int deletedCount = blogDaoImpl.delComment(vo);
+		return deletedCount == 1;
+	}
+	
+	public List<BlogVo> getComment(Long postNo){
+		List<BlogVo> list = blogDaoImpl.getComment(postNo);
+		return list;
+	}
 	
 }

@@ -101,5 +101,23 @@ public class BlogDaoImpl implements BlogDao {
 		int updatedCount = sqlSession.update("blog.updateBlog", vo);
 		return updatedCount;
 	}
+
+	@Override
+	public int addComment(BlogVo vo) {
+		int insertedCount = sqlSession.insert("blog.addComment", vo);
+		return insertedCount;
+	}
+
+	@Override
+	public int delComment(BlogVo vo) {
+		int deletedCount = sqlSession.delete("blog.delComment", vo);
+		return deletedCount;
+	}
+
+	@Override
+	public List<BlogVo> getComment(Long postNo) {
+		List<BlogVo> list = sqlSession.selectList("blog.selComment", postNo);
+		return list;
+	}
 	
 }

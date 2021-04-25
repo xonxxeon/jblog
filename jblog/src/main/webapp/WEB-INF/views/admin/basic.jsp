@@ -2,7 +2,8 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core"
 	prefix="c" %>
-	
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,17 +13,11 @@
 
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-<!-- jQuery library -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-
-<script>
-$(document).ready(function() {
-    $("#inputGroupFile01").on('change',function(){
-        $(this).next('.custom-file-label').html(event.target.files[0].name);
-});
-</script>
+<!-- jQuery -->
+<script src="<c:url value="/assets/javascript/jquery/jquery-3.6.0.js" /> "></script>
 
 <style>
+
 	.basic-cont{
 		margin:10px;
 	}
@@ -32,6 +27,7 @@ $(document).ready(function() {
 	.card-text{
 		color: black;
 	}
+	
 </style>
 
 </head>

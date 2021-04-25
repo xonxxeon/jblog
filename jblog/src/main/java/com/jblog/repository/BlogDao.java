@@ -29,4 +29,9 @@ public interface BlogDao {
 	//	블로그 정보 업데이트
 	public int updateBlog(BlogVo vo);
 	
+	//	코멘트 작성, 삭제, 조회
+	public int addComment(BlogVo vo);
+	public int delComment(BlogVo vo);
+	public List<BlogVo> getComment(Long postNo);
+	
 }

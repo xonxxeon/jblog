@@ -21,6 +21,11 @@ public class BlogVo {
 	private String postTitle;
 	private String postContent;
 	
+	private String cmtContent;
+	private Long cmtNo;
+	
+	private String blogId;
+	
 	public BlogVo() {
 		
 	}
@@ -129,12 +134,38 @@ public class BlogVo {
 		this.postContent = postContent;
 	}
 
+	public String getCmtContent() {
+		return cmtContent;
+	}
+
+	public void setCmtContent(String cmtContent) {
+		this.cmtContent = cmtContent;
+	}
+
+	public Long getCmtNo() {
+		return cmtNo;
+	}
+
+	public void setCmtNo(Long cmtNo) {
+		this.cmtNo = cmtNo;
+	}
+
+	public String getBlogId() {
+		return blogId;
+	}
+
+	public void setBlogId(String blogId) {
+		this.blogId = blogId;
+	}
+
 	@Override
 	public String toString() {
 		return "BlogVo [id=" + id + ", userNo=" + userNo + ", userName=" + userName + ", cateNo=" + cateNo
 				+ ", cateName=" + cateName + ", description=" + description + ", regDate=" + regDate + ", blogTitle="
 				+ blogTitle + ", logoFile=" + logoFile + ", postCount=" + postCount + ", postNo=" + postNo
-				+ ", postTitle=" + postTitle + ", postContent=" + postContent + "]";
+				+ ", postTitle=" + postTitle + ", postContent=" + postContent + ", cmtContent=" + cmtContent
+				+ ", cmtNo=" + cmtNo + ", blogId=" + blogId + "]";
 	}
+
 
 }

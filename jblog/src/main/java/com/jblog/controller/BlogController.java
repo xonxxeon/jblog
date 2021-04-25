@@ -26,7 +26,7 @@ import com.jblog.vo.BlogVo;
 @RequestMapping
 public class BlogController {
 	
-//	로거 연결
+	//	로거 연결
 	private static Logger logger = LoggerFactory.getLogger(BlogController.class);
 	
 	//	서비스 연결
@@ -39,33 +39,62 @@ public class BlogController {
 	public String cate(@PathVariable String id,
 						@RequestParam(value="cateNo", required=false) Long cateNo,
 						@RequestParam(value="postNo", required=false) Long postNo,Model model) {
-
+		
+		logger.debug("=======================================");
 		logger.debug("카테고리 번호 받아오기 : " + cateNo);
 		logger.debug("포스트 번호 받아오기 : " + postNo);
 		BlogVo vo = blogServiceImpl.getUser(id);
+		logger.debug("블로그 주인 정보 : " + vo);
+		logger.debug("블로그 주인 id : " + id);
+		logger.debug("=======================================");
 		
+		//	블로그 주인 userNo 받아오기
 		Long userNo = vo.getUserNo();
+		logger.debug("블로그 주인 userNo : " + userNo);
+		
 		//	카테고리 목록 받아오기
 		List<BlogVo> list = blogServiceImpl.getList(id);
 		
 		//	카테고리 번호 정보가 없으면 : 블로그 진입 초기
 		if(cateNo == null) {
 			//	포스트,리스트 받아오기
+			logger.debug("! 진입경로 : 메인 -------------");
 			List<BlogVo> mainList = blogServiceImpl.mainList(userNo);
 			BlogVo mainPost = blogServiceImpl.mainPost(userNo);
+			
+			//	메인포스트가 있을 때에만 코멘트 정보 불러옴
+			if(mainPost != null) {
+				postNo = mainPost.getPostNo();
+				List<BlogVo> cmt = blogServiceImpl.getComment(postNo);
+				logger.debug("cmt vo : " + cmt);
+				logger.debug("메인 post vo : " + mainPost);
+				
+				model.addAttribute("cmt", cmt);
+			}
+			
 			
 			model.addAttribute(id);
 			model.addAttribute("mainPost", mainPost);
 			model.addAttribute("mainList", mainList);
+			logger.debug("----------------------------");
 		} else {	//	카테고리 번호 정보가 있으면 : 카테고리 클릭
 			
 			//	포스트 번호 정보가 없으면 : 카테고리 클릭
 			if(postNo == null) {
+				logger.debug("! 진입경로 : 메인 - 카테고리");
 				BlogVo cateNoVo = blogServiceImpl.selCatePost(cateNo);
 				model.addAttribute("mainPost", cateNoVo);
+				logger.debug("----------------------------");
 			} else {	//	포스트 번호 정보가 있으면 : 카테고리 - 포스트클릭
+				logger.debug("! 진입경로 : 포스트 선택");
 				BlogVo selPost = blogServiceImpl.selPost(postNo);
 				model.addAttribute("mainPost", selPost);
+				logger.debug("카테고리-포스트클릭 : " + selPost);
+				
+				List<BlogVo> cmt = blogServiceImpl.getComment(postNo);
+				model.addAttribute("cmt", cmt);
+				logger.debug("cmt vo : " + cmt);
+				logger.debug("----------------------------");
 			}
 			
 			BlogVo getUser = blogServiceImpl.getUser(id);
@@ -88,6 +117,7 @@ public class BlogController {
 		model.addAttribute("list", list);
 		
 		logger.debug("vo : " + vo);
+		
 		logger.debug("블로그 타이틀 : " + vo.getBlogTitle());
 
 		return "blog/blog";
@@ -135,6 +165,37 @@ public class BlogController {
 		model.addAttribute("list", list);
 		
 		return "admin/write";
+	}
+	
+	@RequestMapping(value="/addcmt", method=RequestMethod.POST)
+	public String addCmt(@ModelAttribute BlogVo vo, Model model) {
+		Long userNo = vo.getUserNo();
+		String id = vo.getBlogId();
+		
+		Long cateNo = vo.getCateNo();
+		Long postNo = vo.getPostNo();
+		logger.debug("[코멘트작성]추가데이터 : " + vo);
+		
+		boolean success = blogServiceImpl.addComment(vo);
+		
+		logger.debug("[코멘트작성] 성공여부 : " + success);
+		
+		return "redirect:/" + id + "?postNo=" + postNo + "&cateNo=" + cateNo;
+	}
+	
+	@RequestMapping(value="/delcmt", method=RequestMethod.POST)
+	public String delCmt(@ModelAttribute BlogVo vo, Model model) {
+		Long userNo = vo.getUserNo();
+		String id = vo.getBlogId();
+		
+		Long cateNo = vo.getCateNo();
+		Long postNo = vo.getPostNo();
+		
+		boolean success = blogServiceImpl.delComment(vo);
+		
+		logger.debug("[코멘트삭제] 성공여부 : " + success);
+		
+		return "redirect:/" + id + "?postNo=" + postNo + "&cateNo=" + cateNo;
 	}
 	
 	@RequestMapping(value="/addCate", method=RequestMethod.POST)

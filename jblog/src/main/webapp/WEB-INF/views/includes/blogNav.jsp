@@ -25,9 +25,11 @@
     	border: 1px solid lightgray;
     }
 
-	.menu{
+	div.menu{
+		overflow: hidden;
         width: 200px;
-        height: auto;
+        /* vh, vw 는 화면 전체기준 최대치 */
+        height: 100vh;
         float: right;
     }
 </style>

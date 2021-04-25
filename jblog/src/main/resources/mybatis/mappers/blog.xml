@@ -80,7 +80,7 @@
 	
 	<select id="mainPost" parameterType="long" resultType="blogVo">
 		<![CDATA[
-			SELECT p.postTitle, p.postContent
+			SELECT p.postTitle, p.postContent, p.postNo, p.cateNo
 			FROM post p, (SELECT MAX(p.postNo) as postNo
 			                FROM post p, category c
 			                WHERE p.cateNo = c.cateNo AND c.userNo = #{userNo}) max
@@ -99,7 +99,7 @@
 	
 	<select id="selCatePost" parameterType="long" resultType="blogVo">
 		<![CDATA[
-			SELECT p.postTitle, p.postContent
+			SELECT p.postTitle, p.postContent, p.postNo, p.cateNo
 			FROM post p, (SELECT MAX(p.postNo) as postNo
 			                FROM post p, category c
 			                WHERE p.cateNo = c.cateNo AND c.cateNo = #{cateNo}) max
@@ -118,7 +118,7 @@
 	
 	<select id="selPost" parameterType="long" resultType="blogVo">
 		<![CDATA[
-			SELECT p.postTitle, p.postContent
+			SELECT p.postTitle, p.postContent, p.postNo, p.cateNo
 			FROM post p
 			WHERE p.postNo = #{postNo}
 		]]>
@@ -132,5 +132,32 @@
 		]]>
 	</update>
 	
+	<insert id="addComment" parameterType="blogVo">
+		<![CDATA[
+			INSERT INTO comments (cmtNo, postNo, userNo, cmtContent, regDate)
+			VALUES(seq_comments_no.nextval,
+				#{postNo},
+				#{userNo},
+				#{cmtContent},
+				sysdate
+			)
+		]]>
+	</insert>
+	
+	<delete id="delComment" parameterType="blogVo">
+		<![CDATA[
+			DELETE FROM comments
+			WHERE cmtNo = #{cmtNo}
+		]]>
+	</delete>
+	
+	<select id="selComment" parameterType="long" resultType="blogVo">
+		<![CDATA[
+			SELECT u.userNo, u.userName, c.cmtContent, c.regDate, c.cmtNo
+			FROM users u, comments c
+			WHERE c.postNo = #{postNo} AND c.userNo = u.userNo(+) 
+			ORDER BY c.regDate DESC
+		]]>
+	</select>
 
 </mapper>
