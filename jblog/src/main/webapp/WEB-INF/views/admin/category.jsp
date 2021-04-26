@@ -88,6 +88,7 @@
 					class="addCate"
 					name="addCate" 
 					method="POST" 
+					onsubmit="return checkAddCate(this)"
 					action="<c:url value="/addCate" />" >
 		
 		<input type="hidden" name="userNo" value="${ authUser.getUserNo() }">

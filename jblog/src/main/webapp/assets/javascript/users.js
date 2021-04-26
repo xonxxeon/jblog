@@ -95,3 +95,20 @@ function checkid(idField, url) {
 	});
 	
 }
+
+function checkAddCate(ac){
+	var cateName = ac.cateName.value.trim();
+	var description = ac.description.value.trim();
+	
+	if(cateName.length < 1){
+		alert("카테고리명을 입력해 주세요");
+		ac.cateName.focus();
+	} else if (description.length < 1){
+		alert("설명을 입력해 주세요");
+		ac.description.focus();
+	} else {
+		alert("카테고리가 등록되었습니다");
+		return true;
+	}
+	return false;
+}

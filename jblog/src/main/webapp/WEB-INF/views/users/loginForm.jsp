@@ -41,6 +41,9 @@
 		<label class="sr-only">패스워드</label> 
 		<input id="bt" name="password" type="password" class="form-control" placeholder="비밀번호" required>
 		<br/>
+		<c:if test="${exist == 'N' }">
+			<body onload="alert('아이디 또는 비밀번호가 존재하지 않습니다')">
+		</c:if>
 		
 		<input id="bt" class="btn btn-lg btn-secondary btn-block" type="submit" value="로그인">
 	</form>

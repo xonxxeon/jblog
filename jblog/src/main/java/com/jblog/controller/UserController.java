@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.jblog.repository.UserDaoImpl;
 import com.jblog.service.UserService;
@@ -96,12 +97,11 @@ public class UserController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String loginAction(@RequestParam String id,
 							  @RequestParam String password,
+							  RedirectAttributes ra, 
 							  HttpSession session) {
+		logger.debug("입력 : " + id + ", " + password);
 		UserVo authUser = userService.getUser(id, password);
 		
-		logger.debug("authUser no : " + authUser.getUserNo());
-		logger.debug("authUser id : " + authUser.getId());
-		logger.debug("authUser name : " + authUser.getUserName());
 		if(authUser != null) {
 			//	세션에 추가
 			session.setAttribute("authUser", authUser);
@@ -109,6 +109,7 @@ public class UserController {
 			return "redirect:/";
 		} else {
 			//	로그인 실패
+			ra.addFlashAttribute("exist", "N");
 			return "redirect:/users/login";
 		}
 		
